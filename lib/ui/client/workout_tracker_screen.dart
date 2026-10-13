@@ -4,6 +4,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/models/exercise_model.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/workout_service.dart';
+import '../../core/services/trainer_service.dart';
 
 class WorkoutTrackerScreen extends StatelessWidget {
   const WorkoutTrackerScreen({super.key});
@@ -60,23 +61,97 @@ class WorkoutTrackerScreen extends StatelessWidget {
   }
 
   Widget _buildWorkoutHomeView(BuildContext context, WorkoutService workout) {
+    final trainer = context.watch<TrainerService>();
+
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
-        // Quick start button
+        // Quick start empty workout button
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.black,
-            padding: const EdgeInsets.symmetric(vertical: 18),
+            backgroundColor: AppColors.surfaceLight,
+            foregroundColor: AppColors.textPrimary,
+            side: const BorderSide(color: AppColors.divider),
+            padding: const EdgeInsets.symmetric(vertical: 14),
           ),
-          icon: const Icon(Icons.add, size: 24),
-          label: const Text('START EMPTY WORKOUT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          icon: const Icon(Icons.add, size: 20, color: AppColors.primary),
+          label: const Text('Start Blank Custom Workout', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
           onPressed: () {
             workout.startWorkout(title: 'Quick Workout');
           },
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 24),
+
+        // PPL Split Routines section
+        const Text(
+          'Push / Pull / Legs Split',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Select your session for today to load targeted exercises and sets:',
+          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: 12),
+
+        ...trainer.templates.expand((t) => t.days).map((day) {
+          final isPush = day.dayName.toLowerCase().contains('push');
+          final isPull = day.dayName.toLowerCase().contains('pull');
+          final emoji = isPush ? '🏋️' : (isPull ? '🧗' : '🦵');
+          final accent = isPush ? AppColors.primary : (isPull ? AppColors.secondary : AppColors.accentOrange);
+
+          return Card(
+            margin: const EdgeInsets.only(bottom: 12),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: accent.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(emoji, style: const TextStyle(fontSize: 22)),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          day.dayName,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          '${day.exercises.length} Movements • ${day.exercises.map((e) => e.exerciseName).take(2).join(", ")}...',
+                          style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: accent,
+                      foregroundColor: Colors.black,
+                      minimumSize: const Size(68, 36),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                    onPressed: () {
+                      workout.startWorkout(title: day.dayName, template: day);
+                    },
+                    child: const Text('START', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+        const SizedBox(height: 24),
 
         const Text(
           'Recent Completed Workouts',

@@ -72,27 +72,42 @@ class TrainerService extends ChangeNotifier {
 
   List<WorkoutProgramModel> _templates = [
     WorkoutProgramModel(
-      id: 'template_1',
-      title: 'Hypertrophy 4-Day Split',
-      description: 'Focused on progressive overload for chest, back, legs, and arms.',
+      id: 'template_ppl',
+      title: 'Push Pull Legs (PPL) Split',
+      description: 'Gold standard hypertrophy split dividing training by functional muscle mechanics: Push, Pull, and Legs.',
       createdBy: 'trainer_demo_1',
       assignedTo: ['client_demo_1'],
-      createdAt: DateTime.now().subtract(const Duration(days: 30)),
+      createdAt: DateTime.now().subtract(const Duration(days: 15)),
       days: [
         WorkoutDay(
-          dayName: 'Upper Body A',
+          dayName: 'Push Day (Chest, Shoulders, Triceps)',
           exercises: [
-            WorkoutPlanExercise(exerciseId: 'bench_press', exerciseName: 'Barbell Bench Press', targetSets: 4, targetReps: '8-10'),
-            WorkoutPlanExercise(exerciseId: 'barbell_row', exerciseName: 'Bent-Over Barbell Row', targetSets: 4, targetReps: '8-10'),
-            WorkoutPlanExercise(exerciseId: 'overhead_press', exerciseName: 'Overhead Barbell Press', targetSets: 3, targetReps: '10-12'),
-            WorkoutPlanExercise(exerciseId: 'dumbbell_curl', exerciseName: 'Bicep Dumbbell Curl', targetSets: 3, targetReps: '12-15'),
+            WorkoutPlanExercise(exerciseId: 'bench_press', exerciseName: 'Barbell Bench Press', targetSets: 4, targetReps: '8-10', restSeconds: 120),
+            WorkoutPlanExercise(exerciseId: 'incline_db_press', exerciseName: 'Incline Dumbbell Press', targetSets: 3, targetReps: '10-12', restSeconds: 90),
+            WorkoutPlanExercise(exerciseId: 'overhead_press', exerciseName: 'Overhead Barbell Press', targetSets: 3, targetReps: '8-10', restSeconds: 90),
+            WorkoutPlanExercise(exerciseId: 'lateral_raise', exerciseName: 'Dumbbell Lateral Raise', targetSets: 4, targetReps: '12-15', restSeconds: 60),
+            WorkoutPlanExercise(exerciseId: 'tricep_pushdown', exerciseName: 'Cable Tricep Pushdown', targetSets: 3, targetReps: '12-15', restSeconds: 60),
           ],
         ),
         WorkoutDay(
-          dayName: 'Lower Body A',
+          dayName: 'Pull Day (Back, Rear Delts, Biceps)',
           exercises: [
-            WorkoutPlanExercise(exerciseId: 'squat', exerciseName: 'Barbell Back Squat', targetSets: 4, targetReps: '6-8'),
-            WorkoutPlanExercise(exerciseId: 'deadlift', exerciseName: 'Conventional Deadlift', targetSets: 3, targetReps: '5'),
+            WorkoutPlanExercise(exerciseId: 'deadlift', exerciseName: 'Conventional Deadlift', targetSets: 3, targetReps: '5', restSeconds: 150),
+            WorkoutPlanExercise(exerciseId: 'lat_pulldown', exerciseName: 'Wide-Grip Lat Pulldown', targetSets: 4, targetReps: '8-10', restSeconds: 90),
+            WorkoutPlanExercise(exerciseId: 'barbell_row', exerciseName: 'Bent-Over Barbell Row', targetSets: 3, targetReps: '8-10', restSeconds: 90),
+            WorkoutPlanExercise(exerciseId: 'face_pull', exerciseName: 'Cable Face Pull', targetSets: 3, targetReps: '15', restSeconds: 60),
+            WorkoutPlanExercise(exerciseId: 'dumbbell_curl', exerciseName: 'Bicep Dumbbell Curl', targetSets: 3, targetReps: '10-12', restSeconds: 60),
+            WorkoutPlanExercise(exerciseId: 'hammer_curl', exerciseName: 'Neutral Hammer Curl', targetSets: 3, targetReps: '12', restSeconds: 60),
+          ],
+        ),
+        WorkoutDay(
+          dayName: 'Leg Day (Quads, Hamstrings, Calves)',
+          exercises: [
+            WorkoutPlanExercise(exerciseId: 'squat', exerciseName: 'Barbell Back Squat', targetSets: 4, targetReps: '6-8', restSeconds: 120),
+            WorkoutPlanExercise(exerciseId: 'rdl', exerciseName: 'Romanian Deadlift (RDL)', targetSets: 3, targetReps: '8-10', restSeconds: 90),
+            WorkoutPlanExercise(exerciseId: 'leg_press', exerciseName: '45-Degree Leg Press', targetSets: 3, targetReps: '10-12', restSeconds: 90),
+            WorkoutPlanExercise(exerciseId: 'hamstring_curl', exerciseName: 'Lying Hamstring Curl', targetSets: 3, targetReps: '12-15', restSeconds: 60),
+            WorkoutPlanExercise(exerciseId: 'calf_raise', exerciseName: 'Standing Calf Raise', targetSets: 4, targetReps: '15', restSeconds: 45),
           ],
         ),
       ],
