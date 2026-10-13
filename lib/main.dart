@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'core/constants/app_theme.dart';
+import 'core/services/theme_service.dart';
 import 'core/services/auth_service.dart';
 import 'core/services/workout_service.dart';
 import 'core/services/nutrition_service.dart';
@@ -30,16 +30,21 @@ class GymApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeService()),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => WorkoutService()),
         ChangeNotifierProvider(create: (_) => NutritionService()),
         ChangeNotifierProvider(create: (_) => TrainerService()),
       ],
-      child: MaterialApp(
-        title: 'Pulse Gym App',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-        home: const AuthGatekeeper(),
+      child: Consumer<ThemeService>(
+        builder: (context, themeService, _) {
+          return MaterialApp(
+            title: 'Pulse Gym App',
+            debugShowCheckedModeBanner: false,
+            theme: themeService.getThemeData(),
+            home: const AuthGatekeeper(),
+          );
+        },
       ),
     );
   }
